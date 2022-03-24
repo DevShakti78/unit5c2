@@ -1,40 +1,58 @@
-import { useState } from "react";
-
+import { useState } from "react"
 export const AddHouse = () => {
-  const [text,setText] = useState("")
+  const [form, setForm] = useState([]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setForm({
+      ...form,
+      [name]: value,
+    })
+  }
+ console.log(form)
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const payload = form;
+    fetch("http://localhost:8080/houses", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'application/json' }
+    }).then(() => {
+      console.log("Data",payload)
+
+    })
+  }
+
   return (
     <div className="addHouseContainer">
-      <form>
+      <form onSubmit={handleSubmit}>
         <label>name</label>
-        <input type="text" onChange={(e)=>{
-              console.log(e.target.value)
-              SetText(e.target.value)
-          }} className="name" value={""} required />
+        <input type="text" className="name" name="name" onChange={handleChange} required />
         <br />
         <label>ownerName</label>
-        <input value={""} type="text" className="ownerName" required />
+        <input name="ownerName" type="text" className="ownerName" onChange={handleChange} required />
         <br />
         <label>address</label>
-        <input value={""} type="text" className="address" required />
+        <input name="address" type="text" className="address" onChange={handleChange} required />
         <br />
         <label>areaCode</label>
-        <input value={""} type="text" className="areaCode" required />
+        <input name="areaCode" type="text" className="areaCode" onChange={handleChange} required />
         <br />
         <label>rent</label>
-        <input value={""} type="text" className="rent" required />
+        <input name="rent" type="text" className="rent" onChange={handleChange} required />
         <br />
         <label>preferredTenant</label>
         <br />
         <label>bachelor</label>
-        <input checked={""} type="checkbox" className="bachelor" />
+        <input type="checkbox" value="Bachelor" name="bachelor" onChange={handleChange} className="bachelor" />
         <br />
         <label>married</label>
-        <input checked={""} type="checkbox" className="married" />
+        <input type="checkbox" value="Married" name="married" onChange={handleChange} className="married" />
         <br />
         <label>image</label>
-        <input value={""} type="text" className="image" required />
+        <input type="text" name="image" className="image" onChange={handleChange} required />
         <br />
-        <input className="submitBtn" type="submit" />
+        <input className="submitBtn" type="submit" value="Submit" />
       </form>
     </div>
   );
